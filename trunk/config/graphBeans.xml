@@ -15,11 +15,11 @@
  -->
 	<bean id="testRunner" class="com.tinkerpop.graph.benchmark.TestBatchGraphLoad" lazy-init="true">
 		<property name="benchmarkResultsFilename" value="results/benchmark.csv"/>
-		<property name="inputTestDataFile" value="/Users/Mark/Documents/work/irdata/wikipedia/page_links_en.nt.bz2"/>		
+		<property name="inputTestDataFile" value="data/page_links_en.nt.bz2"/>		
 		<!-- ============ Pick a choice of graph loader implementation here ====================== -->
-<!--   		<property name="graphLoaderService" ref="neoLoader" />  -->     
+   		<property name="graphLoaderService" ref="neoLoader" />       
 <!-- 		<property name="graphLoaderService" ref="mockLoader" /> -->   
- 		<property name="graphLoaderService" ref="indexOnlyLoader"/>   
+<!-- 		<property name="graphLoaderService" ref="indexOnlyLoader"/> -->   
 <!-- 		<property name="graphLoaderService" ref="orientLoader"/>  -->
 		
 	</bean>
