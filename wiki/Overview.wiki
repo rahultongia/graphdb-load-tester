@@ -1,0 +1,21 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+This project is intended to provide example code, and benchmarking facilities for loading large volumes of data into a choice of graph databases.
+
+
+= Developer's Guide =
+
+Developers should :
+  * Download the software from SVN
+  * Run the Ant build script
+  * Download the wikipedia test data file
+  * Amend the config/graphBeans.xml settings to work with the correct settings.
+
+
+= Results so far =
+The following databases have been trialled
+  * OrientDB 0.9.25
+  * Neo4j
+  * InfiniteGraph (failed to get licensing software to work)
