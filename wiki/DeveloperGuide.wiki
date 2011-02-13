@@ -1,0 +1,17 @@
+#summary A guide for developers using the framework
+
+= Preparing the test environment =
+This package does *not* include the Wikipedia link dataset which is ~1GB of zipped content. 
+The ant build.xml file should automatically download the appropriate data file before running the tests.
+
+= Configuring different test scenarios =
+The Spring configuration file contains different choices for configurations of graph loading services.
+The choices of graph database are currently:
+ * Neo4j 1.3M02
+ * OrientDB 0.9.25
+
+Each graph database also needs an indexing service. The OrientDB service currently uses it's own indexing service but Neo4j can use a choice of the provided indexing services based on:
+ * BerkeleyDB 
+ * Lucene-based service.
+
+At the time of writing none of these configurations are capable of loading the test data on Windows 32 bit JVM or on Mac OSX with 2GB RAM.
