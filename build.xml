@@ -1,0 +1,88 @@
+<project name="WikipediaGraphLoader" default="dist" basedir=".">
+
+	<!-- ================================================== -->
+	<!-- Build script for the Wikipedia Graph Loader test   -->
+	<!-- ================================================== -->
+	
+	<description>Build script for the Wikipedia Graph Loader test</description>
+	
+	<property file="build.properties"/>
+	<property name="srcDir" location="src" />
+	<property name="tmpDir" location="tmp" />
+	<property name="libDir" location="lib" />
+	
+	
+	<path id="project.root">
+		<pathelement path="${basedir}" />
+	</path>
+
+	<path id="loader.classpath">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="lib/blueprints">
+			<include name="*.jar" />				
+		</fileset>
+		<fileset dir="lib/neo4j">
+			<include name="*.jar" />				
+		</fileset>
+		<fileset dir="lib/orientdb">
+			<include name="*.jar" />				
+		</fileset>
+	</path>
+
+	<!-- ================================================== -->
+	<!-- Clean temporary directories                        -->
+	<!-- ================================================== -->
+	
+	<target name="clean" description="Clean temporary folders">
+		<delete dir="${tmpDir}"/> 
+	</target>
+	
+	<!-- ================================================== -->
+	<!-- Create directory structure                         -->
+	<!-- ================================================== -->
+	
+	<target name="create.dirs" description="Create the directory structure">
+		<mkdir dir="dist" />
+		<mkdir dir="${tmpDir}" />
+	</target>
+	
+	<!-- ================================================== -->
+	<!-- Compile - all									-->
+	<!-- ================================================== -->
+
+	<target name="compile" depends="create.dirs" description="Compile source files">
+		<javac destdir="${tmpDir}" source="1.5" target="1.5" debug="true">
+			<src path="${srcDir}" />
+			<classpath refid="loader.classpath" />
+		</javac>
+	</target>
+	
+	<!-- ================================================== -->
+	<!-- Create jar file - core                             -->
+	<!-- ================================================== -->
+	
+	<target name="jar.core" depends="compile" description="Generate the jar file">
+		<copy todir="${tmpDir}" overwrite="true">			
+				<fileset dir="src" includes="**/*.properties"/>
+				<fileset dir="src" includes="**/*.png"/>
+		</copy>
+		
+		<jar jarfile="dist/wikiGraphLoader.jar">
+			<fileset dir="${tmpDir}" includes="**/**"/>
+		</jar>
+	</target>
+	
+	
+	
+	<!-- ================================================== -->
+	<!-- Create distribution                                -->
+	<!-- ================================================== -->
+
+	<target name="dist" depends="jar.core" description="Create a distribution">
+		<antcall target="clean"/> 
+	</target>
+	
+
+</project>
