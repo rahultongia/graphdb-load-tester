@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/je-4.1.7.jar"/>
+	<classpathentry kind="lib" path="lib/ant.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-3.0.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core-3.0.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans-3.0.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/spring-asm-3.0.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/geronimo-jta_1.1_spec-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-com-1.3.M02.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-graph-algo-1.3.M02.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-ha-1.3.M02.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-kernel-1.3.M02-tests.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-kernel-1.3.M02.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-lucene-index-1.3.M02.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-management-1.3.M02.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-server-extensions-1.3.M02.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-shell-1.3.M02-docs.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-shell-1.3.M02.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-udc-1.3.M02-neo4j.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-udc-1.3.M02.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/netty-3.2.1.Final.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/org.apache.servicemix.bundles.jline-0.9.94_1.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/org.apache.servicemix.bundles.lucene-3.0.1_2.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/zookeeper-3.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/neo4j/neo4j-index-1.2-1.2.M04.jar"/>
+	<classpathentry kind="lib" path="lib/orientdb/persistence-api-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/blueprints/blueprints-0.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/orientdb/orient-commons-0.9.25-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/orientdb/orientdb-core-0.9.25-SNAPSHOT.jar" sourcepath="/Users/Mark/Documents/work/javalibs/orientSVN/trunk/core/src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
