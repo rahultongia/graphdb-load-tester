@@ -31,6 +31,19 @@
 		</fileset>
 	</path>
 
+	
+	<!-- ================================================== -->
+	<!-- Download the test data set                         -->
+	<!-- ================================================== -->
+	
+	<target name="downloadTestData" description="Download the wikipedia test data file">
+		<mkdir dir="data"/>
+		<get src="http://downloads.dbpedia.org/3.6/en/page_links_en.nt.bz2" 
+		    dest="data/page_links_en.nt.bz2" 
+		    verbose="true"
+		    usetimestamp="true"/>
+	</target>
+
 	<!-- ================================================== -->
 	<!-- Clean temporary directories                        -->
 	<!-- ================================================== -->
