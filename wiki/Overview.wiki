@@ -1,8 +1,10 @@
-#summary One-sentence summary of this page.
+#summary Introducing the graphdb-load-tester project
 
-= Introduction =
+= Background to this project =
 
-This project is intended to provide example code, and benchmarking facilities for loading large volumes of data into a choice of graph databases.
+While graph databases promise lots of benefits once data is loaded into them I have been frustrated by their ability to load large volumes of data. This project is intended to highlight (and hopefully solve these issues) through using a large publicly available data set -the Wikipedia links data. 
+== Why Wikipedia? ==
+The Wikipedia links data is a an example of a very large graph that has a small number of highly connected nodes and many lesser-connected nodes. The data consists of a single file with ~130 million edges of the type articleID1->articleID2
 
 
 = Developer's Guide =
