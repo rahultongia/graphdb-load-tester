@@ -1,4 +1,4 @@
-<project name="WikipediaGraphLoader" default="dist" basedir=".">
+<project name="WikipediaGraphLoader" default="runTest" basedir=".">
 
 	<!-- ================================================== -->
 	<!-- Build script for the Wikipedia Graph Loader test   -->
@@ -10,13 +10,29 @@
 	<property name="srcDir" location="src" />
 	<property name="tmpDir" location="tmp" />
 	<property name="libDir" location="lib" />
+	<property name="dist.jar" value="dist/wikiGraphLoader.jar"/>
 	
 	
 	<path id="project.root">
 		<pathelement path="${basedir}" />
 	</path>
 
-	<path id="loader.classpath">
+	<path id="build.classpath">
+		<fileset dir="lib">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="lib/blueprints">
+			<include name="*.jar" />				
+		</fileset>
+		<fileset dir="lib/neo4j">
+			<include name="*.jar" />				
+		</fileset>
+		<fileset dir="lib/orientdb">
+			<include name="*.jar" />				
+		</fileset>
+	</path>
+	<path id="run.classpath">
+		<filelist> <file name="${dist.jar}"/></filelist>
 		<fileset dir="lib">
 			<include name="*.jar" />
 		</fileset>
@@ -32,17 +48,24 @@
 	</path>
 
 	
+
+	
 	<!-- ================================================== -->
 	<!-- Download the test data set                         -->
 	<!-- ================================================== -->
 	
-	<target name="downloadTestData" description="Download the wikipedia test data file">
+	<target name="downloadTestData" depends="check-wikipedia-downloaded" unless="testdata.present" description="Download the wikipedia test data file">
 		<mkdir dir="data"/>
 		<get src="http://downloads.dbpedia.org/3.6/en/page_links_en.nt.bz2" 
 		    dest="data/page_links_en.nt.bz2" 
 		    verbose="true"
 		    usetimestamp="true"/>
 	</target>
+	
+	<target name="check-wikipedia-downloaded">
+	    <available file="data/page_links_en.nt.bz2" property="testdata.present"/>
+	</target>
+	
 
 	<!-- ================================================== -->
 	<!-- Clean temporary directories                        -->
@@ -68,7 +91,7 @@
 	<target name="compile" depends="create.dirs" description="Compile source files">
 		<javac destdir="${tmpDir}" source="1.5" target="1.5" debug="true">
 			<src path="${srcDir}" />
-			<classpath refid="loader.classpath" />
+			<classpath refid="build.classpath" />
 		</javac>
 	</target>
 	
@@ -82,7 +105,7 @@
 				<fileset dir="src" includes="**/*.png"/>
 		</copy>
 		
-		<jar jarfile="dist/wikiGraphLoader.jar">
+		<jar jarfile="${dist.jar}">
 			<fileset dir="${tmpDir}" includes="**/**"/>
 		</jar>
 	</target>
@@ -95,6 +118,18 @@
 
 	<target name="dist" depends="jar.core" description="Create a distribution">
 		<antcall target="clean"/> 
+	</target>
+
+	<!-- ================================================== -->
+	<!-- Run benchmark                                      -->
+	<!-- ================================================== -->
+
+	<target name="runTest" depends="downloadTestData,jar.core"  
+		
+		description="Runs the test once the wikipedia data has been downloaded and the software has been built">
+		<java fork="true" maxmemory="2000m" classname="com.tinkerpop.graph.benchmark.TestBatchGraphLoad">
+			<classpath refid="run.classpath"/>
+		</java> 
 	</target>
 	
 
