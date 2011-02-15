@@ -1,19 +1,11 @@
 #summary Results from tests so far
 
 = Test Results =
-
-So far I have been unable to load the test dataset into any of the implementations listed here running on Windows 32 bit JVM or a Mac OSX 64 bit JVM with 2GB of RAM.
-
-
-= OrientDB =
-The Orient DB database implementation is currently accessed via the Tinkerpop API and suffered from very slow load times despite using the transactional API to batch operations.
-There appears to be particularly poor performance due to an [http://groups.google.com/group/orient-database/browse_thread/thread/35a234aa30fecd75 issue logged here]
-
-= Neo4J =
-The Neo4J implementation uses the batch inserter API and a choice of higher performance indexing services to provide the Wikipedia-article-ID to Vertex-id lookup. After 30 million additions the performance seems to [https://spreadsheets.google.com/ccc?key=0AsKVSn5SGg_wdE5KWXFwd0JuRGlfR2NOMG5KVUVOWlE&hl=en&authkey=CLnptdAN hit a wall] and the load process had to be killed.
-
-= InfiniteGraph =
-This product I failed to get running largely due to the licensing system on the eval not playing ball. If any of the InfiniteGraph team want to partake in these evaluations I will gladly publish their results here.
+|| *Technology* || *Description* || *Results*||
+|| *OrientDB* || The Orient DB database implementation is currently accessed via the Tinkerpop API and suffered from very slow load times despite using the transactional API to batch operations. || There appears to be particularly poor performance due to an [http://groups.google.com/group/orient-database/browse_thread/thread/35a234aa30fecd75 issue logged here] ||
+|| *Neo4J* ||The Neo4J implementation uses the batch inserter API and a choice of higher performance indexing services to provide the Wikipedia-article-ID to Vertex-id lookup.||After 30 million additions the performance seems to [https://spreadsheets.google.com/ccc?key=0AsKVSn5SGg_wdE5KWXFwd0JuRGlfR2NOMG5KVUVOWlE&hl=en&authkey=CLnptdAN hit a wall] and the load process had to be killed||
+|| *InfiniteGraph* || || ||
+|| *Lucene Graph* || Not strictly a graph database - using a Lucene document for each node and each edge with indexed properties for Article IDs || All 130 million records loaded into an 11GB index in 6 hours using < 1.5GB RAM with reasonably flat performance ||
 
 = Indexing services =
 Tests have been run simply loading the data into the indexing services only and not the graph database to prove that these are not the bottleneck. The Lucene-based implementation was the only one that completed loading all 130 million records. The benchmarks for Berkeley and Lucene are contrasted [https://spreadsheets.google.com/ccc?key=0AsKVSn5SGg_wdDNXMm1iMWRFSzBjcHF2OTN5aWkwSlE&hl=en&authkey=CJ_tsFo here]. I have not tuned the Berkeley settings from the "Hello World" type examples so would appreciate any pointers on how this could be optimised.
