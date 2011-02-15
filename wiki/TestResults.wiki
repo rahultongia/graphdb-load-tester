@@ -3,7 +3,7 @@
 = GraphDB Results =
 || *Technology* || *Description* || *Results*||
 || *OrientDB* || The Orient DB database implementation is currently accessed via the Tinkerpop API and suffered from very slow load times despite using the transactional API to batch operations. || There appears to be particularly poor performance due to an [http://groups.google.com/group/orient-database/browse_thread/thread/35a234aa30fecd75 issue logged here] ||
-|| *Neo4J* ||The Neo4J implementation uses the batch inserter API and the choice of higher performance indexing service discussed below to provide the Wikipedia-article-ID to Vertex-id lookup.||After 30 million additions the performance seems to [https://spreadsheets.google.com/ccc?key=0AsKVSn5SGg_wdE5KWXFwd0JuRGlfR2NOMG5KVUVOWlE&hl=en&authkey=CLnptdAN hit a wall] and the load process had to be killed||
+|| *Neo4J* ||The Neo4J implementation uses the batch inserter API and the choice of higher performance indexing service discussed below to provide the Wikipedia-article-ID to Vertex-id lookup.||After 30 million additions the Neo4J database performance [https://spreadsheets.google.com/ccc?key=0AsKVSn5SGg_wdE5KWXFwd0JuRGlfR2NOMG5KVUVOWlE&hl=en&authkey=CLnptdAN hit a wall] and the load process had to be killed||
 || *InfiniteGraph* || || ||
 || *Lucene Graph* || Not strictly a graph database - using a Lucene document for each node and each edge with indexed properties for Article IDs || All 130 million records loaded into an 11GB index in 6 hours using < 1.5GB RAM with reasonably flat performance ||
 
