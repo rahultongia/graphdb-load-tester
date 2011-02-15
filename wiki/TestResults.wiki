@@ -1,11 +1,11 @@
 #summary Results from tests so far
 
-= Test Results =
+= GraphDB Results =
 || *Technology* || *Description* || *Results*||
 || *OrientDB* || The Orient DB database implementation is currently accessed via the Tinkerpop API and suffered from very slow load times despite using the transactional API to batch operations. || There appears to be particularly poor performance due to an [http://groups.google.com/group/orient-database/browse_thread/thread/35a234aa30fecd75 issue logged here] ||
-|| *Neo4J* ||The Neo4J implementation uses the batch inserter API and a choice of higher performance indexing services to provide the Wikipedia-article-ID to Vertex-id lookup.||After 30 million additions the performance seems to [https://spreadsheets.google.com/ccc?key=0AsKVSn5SGg_wdE5KWXFwd0JuRGlfR2NOMG5KVUVOWlE&hl=en&authkey=CLnptdAN hit a wall] and the load process had to be killed||
+|| *Neo4J* ||The Neo4J implementation uses the batch inserter API and the choice of higher performance indexing service discussed below to provide the Wikipedia-article-ID to Vertex-id lookup.||After 30 million additions the performance seems to [https://spreadsheets.google.com/ccc?key=0AsKVSn5SGg_wdE5KWXFwd0JuRGlfR2NOMG5KVUVOWlE&hl=en&authkey=CLnptdAN hit a wall] and the load process had to be killed||
 || *InfiniteGraph* || || ||
 || *Lucene Graph* || Not strictly a graph database - using a Lucene document for each node and each edge with indexed properties for Article IDs || All 130 million records loaded into an 11GB index in 6 hours using < 1.5GB RAM with reasonably flat performance ||
 
 = Indexing services =
-Tests have been run simply loading the data into the indexing services only and not the graph database to prove that these are not the bottleneck. The Lucene-based implementation was the only one that completed loading all 130 million records. The benchmarks for Berkeley and Lucene are contrasted [https://spreadsheets.google.com/ccc?key=0AsKVSn5SGg_wdDNXMm1iMWRFSzBjcHF2OTN5aWkwSlE&hl=en&authkey=CJ_tsFo here]. I have not tuned the Berkeley settings from the "Hello World" type examples so would appreciate any pointers on how this could be optimised.
+The likes of Neo4J use Lucene as an indexing service but [http://lists.neo4j.org/pipermail/user/2011-February/006556.html complain that it is a bottleneck]. The Lucene implementation provided here shows that this need not be the case and tests have been run simply loading the data into the indexing service only, bypassing the Neo4J call that creates Vertexes. The Lucene-based implementation completed loading all 130 million records unlike the Berkeley DB based inplementation which hit performance issues - benchmarks are contrasted [https://spreadsheets.google.com/ccc?key=0AsKVSn5SGg_wdDNXMm1iMWRFSzBjcHF2OTN5aWkwSlE&hl=en&authkey=CJ_tsFo here]. I have not tuned the Berkeley settings from the "Hello World" type examples so would appreciate any pointers on how this could be optimised.
