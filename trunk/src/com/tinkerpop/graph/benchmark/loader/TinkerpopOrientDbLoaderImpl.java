@@ -3,6 +3,7 @@ package com.tinkerpop.graph.benchmark.loader;
 import java.io.File;
 import java.util.Iterator;
 
+import com.orientechnologies.orient.core.intent.OIntentMassiveInsert;
 import com.tinkerpop.blueprints.pgm.Index;
 import com.tinkerpop.blueprints.pgm.Vertex;
 import com.tinkerpop.blueprints.pgm.TransactionalGraph.Conclusion;
@@ -26,6 +27,11 @@ public class TinkerpopOrientDbLoaderImpl implements GraphLoaderService
 	private OrientGraph graph;
 	private Index<Vertex> index;
 	
+	//See http://code.google.com/p/orient/wiki/PerformanceTuning#Massive_Insertion
+	//Not sure I beleive the statement in the above that says no transactions (and therefore autocommmit?) is faster than
+	// carefully batched activity
+	boolean useTransaction=true; 
+	
 
 	public TinkerpopOrientDbLoaderImpl ()  
 	{
@@ -37,9 +43,13 @@ public class TinkerpopOrientDbLoaderImpl implements GraphLoaderService
 		deleteDirectory(dir);
 		dir.mkdirs();
 		graph=new OrientGraph("local:"+getOrientDbDirName()+"/"+orientDbName);
-		graph.setTransactionMode(Mode.MANUAL);
+		graph.getRawGraph().declareIntent( new OIntentMassiveInsert() );
+		if(useTransaction)
+		{
+			graph.setTransactionMode(Mode.MANUAL);
+			graph.startTransaction();
+		}
 		index=graph.createManualIndex("userKeyIndex", Vertex.class);		
-		graph.startTransaction();
 		
 	}
 	
@@ -91,11 +101,14 @@ public class TinkerpopOrientDbLoaderImpl implements GraphLoaderService
 		//Create edge
 		graph.addEdge(null, fromNode, toNode, null);
 
-		if(numInserts>maxNumRecordsBeforeCommit)
+		if(useTransaction)
 		{
-			graph.stopTransaction(Conclusion.SUCCESS);
-			graph.startTransaction();	
-			numInserts=0;
+			if(numInserts>maxNumRecordsBeforeCommit)
+			{
+				graph.stopTransaction(Conclusion.SUCCESS);
+				graph.startTransaction();	
+				numInserts=0;
+			}
 		}
 	}
 	private Vertex getVertexFromIndex(String fromNodeKey)
@@ -117,7 +130,10 @@ public class TinkerpopOrientDbLoaderImpl implements GraphLoaderService
 	@Override
 	public void close()
 	{
-		graph.stopTransaction(Conclusion.SUCCESS);
+		if(useTransaction)
+		{
+			graph.stopTransaction(Conclusion.SUCCESS);
+		}
 		graph.shutdown();
 	}
 	public void setOrientDbDirName(String orientDbDirName)
@@ -162,6 +178,14 @@ public class TinkerpopOrientDbLoaderImpl implements GraphLoaderService
 	public int getMaxNumRecordsBeforeCommit()
 	{
 		return maxNumRecordsBeforeCommit;
+	}
+	public boolean isUseTransaction()
+	{
+		return useTransaction;
+	}
+	public void setUseTransaction(boolean useTransaction)
+	{
+		this.useTransaction = useTransaction;
 	}
 	
 
