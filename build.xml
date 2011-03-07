@@ -127,7 +127,7 @@
 	<target name="runTest" depends="downloadTestData,jar.core"  
 		
 		description="Runs the test once the wikipedia data has been downloaded and the software has been built">
-		<java fork="true" maxmemory="2000m" classname="com.tinkerpop.graph.benchmark.TestBatchGraphLoad">
+		<java fork="true" maxmemory="1200m" classname="com.tinkerpop.graph.benchmark.TestBatchGraphLoad">
 			<classpath refid="run.classpath"/>
 		</java> 
 	</target>

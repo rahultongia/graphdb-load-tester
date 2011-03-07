@@ -94,7 +94,8 @@ public class TinkerpopOrientDbLoaderImpl implements GraphLoaderService
 		if(numInserts>maxNumRecordsBeforeCommit)
 		{
 			graph.stopTransaction(Conclusion.SUCCESS);
-			graph.startTransaction();			
+			graph.startTransaction();	
+			numInserts=0;
 		}
 	}
 	private Vertex getVertexFromIndex(String fromNodeKey)
