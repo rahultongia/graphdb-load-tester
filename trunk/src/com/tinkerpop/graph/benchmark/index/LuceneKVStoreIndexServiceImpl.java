@@ -28,9 +28,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 
 /**
- * Uses Lucene KVStore to store and retrieve vertex Ids keyed on a user-defined key. Uses: 1) A
- * bloom filter "to know what we don't know" 2) An LRU cache to remember commonly accessed values we
- * do know 3) Uses a buffer to accumulate uncommitted state Lucene takes care of the rest.
+ * Uses Lucene KVStore to store and retrieve vertex Ids keyed on a user-defined key.
  * @author Mark
  */
 public class LuceneKVStoreIndexServiceImpl implements SimpleKeyToNodeIdIndex
@@ -39,7 +37,6 @@ public class LuceneKVStoreIndexServiceImpl implements SimpleKeyToNodeIdIndex
     private KVStore map;
     int numInsertsSinceLastCommit = 0;
 
-    //    LRUCache<String, Long> hotKeyCache = new LRUCache<String, Long>(10000);
     public LuceneKVStoreIndexServiceImpl(String path)
     {
         this.path = path;
@@ -49,7 +46,6 @@ public class LuceneKVStoreIndexServiceImpl implements SimpleKeyToNodeIdIndex
     {
         try
         {
-            long start = System.currentTimeMillis();
             File f = new File(path);
             //        Directory dir = FSDirectory.open(f);//Let Lucene decide
             //        Directory dir = new NIOFSDirectory(f, null);
@@ -79,7 +75,6 @@ public class LuceneKVStoreIndexServiceImpl implements SimpleKeyToNodeIdIndex
             }
             numInsertsSinceLastCommit = 0;
         }
-        //        hotKeyCache.put(udk, graphNodeId);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream daos = new DataOutputStream(baos);
         try
@@ -97,11 +92,6 @@ public class LuceneKVStoreIndexServiceImpl implements SimpleKeyToNodeIdIndex
     @Override
     public long getGraphNodeId(String udk)
     {
-        //        Long cachedValue = hotKeyCache.get(udk);
-        //        if (cachedValue != null)
-        //        {
-        //            return cachedValue;
-        //        }
         byte[] value;
         try
         {
@@ -135,34 +125,4 @@ public class LuceneKVStoreIndexServiceImpl implements SimpleKeyToNodeIdIndex
             e.printStackTrace();
         }
     }
-    //    static class LRUCache<K, V> extends LinkedHashMap<K, V>
-    //    {
-    //        /**
-    //         * Default value
-    //         */
-    //        private static final long serialVersionUID = 1L;
-    //        private int mMaxEntries;
-    //
-    //        public LRUCache(int maxEntries)
-    //        {
-    //            // removeEldestEntry() is called after a put(). To allow maxEntries in
-    //            // cache, capacity should be maxEntries + 1 (+1 for the entry which will
-    //            // be removed). Load factor is taken as 1 because size is fixed. This is
-    //            // less space efficient when very less entries are present, but there
-    //            // will be no effect on time complexity for get(). The third parameter
-    //            // in the base class constructor says that this map is access-order
-    //            // oriented.
-    //            super(maxEntries + 1, 1, true);
-    //            mMaxEntries = maxEntries;
-    //        }
-    //
-    //        @Override
-    //        protected boolean removeEldestEntry(Map.Entry<K, V> eldest)
-    //        {
-    //            // After size exceeds max entries, this statement returns true and the
-    //            // oldest value will be removed. Since this map is access oriented the
-    //            // oldest value would be least recently used.
-    //            return size() > mMaxEntries;
-    //        }
-    //    }
 }
