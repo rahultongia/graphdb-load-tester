@@ -48,7 +48,7 @@
 		<!-- Optionally provide a custom choice of KeyService in place of Neo default -->	
 		<!-- <property name="keyService"  ref="berkeleyKeyService"/>  -->  		
 		 <!-- <property name="keyService" ref="fastLuceneKeyService"></property> --> 
-		 <!-- <property name="keyService" ref="fastLuceneKVStore"></property> -->
+		 <property name="keyService" ref="fastLuceneKVStore"></property> 
 	</bean>
 	
 	
