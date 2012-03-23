@@ -21,13 +21,10 @@
 		<fileset dir="lib">
 			<include name="*.jar" />
 		</fileset>
-		<fileset dir="lib/blueprints">
+		<fileset dir="lib/neo4j1.6">
 			<include name="*.jar" />				
 		</fileset>
-		<fileset dir="lib/neo4j">
-			<include name="*.jar" />				
-		</fileset>
-		<fileset dir="lib/orientdb">
+		<fileset dir="lib/orientdb-1.0rc8">
 			<include name="*.jar" />				
 		</fileset>
 	</path>
@@ -36,13 +33,10 @@
 		<fileset dir="lib">
 			<include name="*.jar" />
 		</fileset>
-		<fileset dir="lib/blueprints">
+		<fileset dir="lib/neo4j1.6">
 			<include name="*.jar" />				
 		</fileset>
-		<fileset dir="lib/neo4j">
-			<include name="*.jar" />				
-		</fileset>
-		<fileset dir="lib/orientdb">
+		<fileset dir="lib/orientdb-1.0rc8">
 			<include name="*.jar" />				
 		</fileset>
 	</path>
@@ -89,7 +83,7 @@
 	<!-- ================================================== -->
 
 	<target name="compile" depends="create.dirs" description="Compile source files">
-		<javac destdir="${tmpDir}" source="1.5" target="1.5" debug="true">
+		<javac destdir="${tmpDir}" source="1.6" target="1.6" debug="true">
 			<src path="${srcDir}" />
 			<classpath refid="build.classpath" />
 		</javac>
