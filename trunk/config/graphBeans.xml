@@ -17,10 +17,10 @@
 		<property name="benchmarkResultsFilename" value="results/benchmark.csv"/>
 		<property name="inputTestDataFile" value="data/page_links_en.nt.bz2"/>		
 		<!-- ============ Pick a choice of graph loader implementation here ====================== -->
-   		<property name="graphLoaderService" ref="neoLoader" />       
+   		 <property name="graphLoaderService" ref="neoLoader" />    
 <!-- 		<property name="graphLoaderService" ref="mockLoader" /> -->   
-<!-- 		<property name="graphLoaderService" ref="indexOnlyLoader"/> -->   
-<!-- 		<property name="graphLoaderService" ref="orientLoader"/>  -->
+<!--   		<property name="graphLoaderService" ref="indexOnlyLoader"/> -->  
+<!--   		<property name="graphLoaderService" ref="orientLoader"/>  -->
 		
 	</bean>
 	
@@ -35,8 +35,10 @@
 	     service required to remember which keys are associated with which Vertex.	 
 	 -->	
 	<bean id="indexOnlyLoader" class="com.tinkerpop.graph.benchmark.loader.GraphIndexOnlyLoaderServiceImpl" lazy-init="true" >
-<!--		<property name="keyService" ref="fastLuceneKeyService"></property> -->
-		<property name="keyService" ref="berkeleyKeyService"></property>
+		<!-- <property name="keyService" ref="fastLuceneKeyService"></property>  -->
+		<!-- <property name="keyService" ref="berkeleyKeyService"></property> -->
+ 		<property name="keyService" ref="fastLuceneKVStore"></property>
+		
 	</bean>
 	
 	<bean id="neoLoader" class="com.tinkerpop.graph.benchmark.loader.Neo4JLoaderImpl" init-method="init" lazy-init="true">
@@ -45,13 +47,17 @@
 
 		<!-- Optionally provide a custom choice of KeyService in place of Neo default -->	
 		<!-- <property name="keyService"  ref="berkeleyKeyService"/>  -->  		
-		<property name="keyService" ref="fastLuceneKeyService"></property>
+		 <!-- <property name="keyService" ref="fastLuceneKeyService"></property> --> 
+		 <!-- <property name="keyService" ref="fastLuceneKVStore"></property> -->
 	</bean>
-	<bean id="orientLoader" class="com.tinkerpop.graph.benchmark.loader.TinkerpopOrientDbLoaderImpl" lazy-init="true" init-method="init">
+	
+	
+	<bean id="orientLoader" class="com.tinkerpop.graph.benchmark.loader.OrientDbNativeLoaderImpl" lazy-init="true" init-method="init">
 		<property name="orientDbDirName" value="indexes/wikipediaOrientDb"/>
 		<property name="orientDbName" value="wikipediaOrientDb"/>
-		<property name="maxNumRecordsBeforeCommit" value="500000"/>
+		<property name="useInternalOrientIndex" value="false" /> <!-- Replaces Orients index service with a faster one -->
 	</bean>
+	
 	
 	
 	<!-- ======================================================================================== -->
@@ -68,6 +74,11 @@
 		<property name="bloomFilterSize" value="50000000"/>				
 		<property name="maxNumRecordsBeforeCommit" value="500000"/>
 		<property name="lruCacheSize" value="500000"/>
+	</bean>
+	
+	
+	<bean id="fastLuceneKVStore" class="com.tinkerpop.graph.benchmark.index.LuceneKVStoreIndexServiceImpl" lazy-init="true" init-method="init">
+		<constructor-arg value="indexes/wikipediaNeo4jLuceneKVStore"/>
 	</bean>
 	
 	<bean id="berkeleyKeyService" class="com.tinkerpop.graph.benchmark.index.BerkeleyIndexImpl"  lazy-init="true">

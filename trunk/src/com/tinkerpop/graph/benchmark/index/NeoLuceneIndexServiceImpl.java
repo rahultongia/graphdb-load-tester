@@ -1,4 +1,5 @@
 package com.tinkerpop.graph.benchmark.index;
+
 /**
  *   By virtue of the Neo4j dependency..... 
  * 
@@ -15,43 +16,63 @@ package com.tinkerpop.graph.benchmark.index;
  *    You should have received a copy of the GNU Affero General Public License
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import org.neo4j.index.lucene.LuceneIndexBatchInserterImpl;
-import org.neo4j.kernel.impl.batchinsert.BatchInserter;
+import java.util.HashMap;
 
+import org.neo4j.graphdb.index.BatchInserterIndex;
+import org.neo4j.graphdb.index.BatchInserterIndexProvider;
+import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.helpers.collection.MapUtil;
+import org.neo4j.index.impl.lucene.LuceneBatchInserterIndexProvider;
+import org.neo4j.kernel.impl.batchinsert.BatchInserter;
 
 /**
  * A wrapper for the Neo4j Batch index service
  * @author MAHarwood
- *
  */
 public class NeoLuceneIndexServiceImpl implements SimpleKeyToNodeIdIndex
 {
+    private BatchInserterIndexProvider indexService;
+    private BatchInserterIndex nodeIndex;
 
-	private LuceneIndexBatchInserterImpl indexService;
+    public NeoLuceneIndexServiceImpl(BatchInserter inserter)
+    {
+        // create the batch index service
+        indexService = new LuceneBatchInserterIndexProvider(inserter);
+        nodeIndex = indexService.nodeIndex("nodes", MapUtil.stringMap("type", "exact"));
+        nodeIndex.setCacheCapacity("udk", 100000); //$NON-NLS-1$
+    }
 
-	public NeoLuceneIndexServiceImpl(BatchInserter inserter)
-	{
-		// create the batch index service
-		indexService = new LuceneIndexBatchInserterImpl( inserter );
-	}
+    @Override
+    public void close()
+    {
+        //		indexService.optimize();
+        nodeIndex.flush();
+        indexService.shutdown();
+    }
 
-	@Override
-	public void close()
-	{
-		indexService.optimize();
-		indexService.shutdown();		
-	}
+    @Override
+    public long getGraphNodeId(String udk)
+    {
+        long result = -1;
+        //TODO need to flush to see changes?
+        IndexHits<Long> hits = nodeIndex.get("udk", udk);
+        if (hits != null)
+        {
+            Long possibleNullReturn = hits.getSingle();
+            if (possibleNullReturn != null)
+            {
+                result = possibleNullReturn;
+            }
+        }
+        return result;
+    }
 
-	@Override
-	public long getGraphNodeId(String udk)
-	{
-		return indexService.getSingleNode("udk", udk); 
-	}
-
-	@Override
-	public void put(String udk, long graphNodeId)
-	{
-		indexService.index(graphNodeId, "udk", udk); 	
-	}
-
+    @Override
+    public void put(String udk, long graphNodeId)
+    {
+        HashMap<String, Object> properties = new HashMap<String, Object>();
+        properties.put("udk", udk);
+        nodeIndex.add(graphNodeId, properties);
+        //TODO when to flush?
+    }
 }
