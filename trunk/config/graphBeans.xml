@@ -17,9 +17,9 @@
 		<property name="benchmarkResultsFilename" value="results/benchmark.csv"/>
 		<property name="inputTestDataFile" value="data/page_links_en.nt.bz2"/>		
 		<!-- ============ Pick a choice of graph loader implementation here ====================== -->
-   		 <property name="graphLoaderService" ref="neoLoader" />    
+<!--    		 <property name="graphLoaderService" ref="neoLoader" />  -->  
 <!-- 		<property name="graphLoaderService" ref="mockLoader" /> -->   
-<!--   		<property name="graphLoaderService" ref="indexOnlyLoader"/> -->  
+   		<property name="graphLoaderService" ref="indexOnlyLoader"/>   
 <!--   		<property name="graphLoaderService" ref="orientLoader"/>  -->
 		
 	</bean>
@@ -35,9 +35,9 @@
 	     service required to remember which keys are associated with which Vertex.	 
 	 -->	
 	<bean id="indexOnlyLoader" class="com.tinkerpop.graph.benchmark.loader.GraphIndexOnlyLoaderServiceImpl" lazy-init="true" >
-		<!-- <property name="keyService" ref="fastLuceneKeyService"></property>  -->
-		<!-- <property name="keyService" ref="berkeleyKeyService"></property> -->
- 		<property name="keyService" ref="fastLuceneKVStore"></property>
+<!--	 <property name="keyService" ref="fastLuceneKeyService"></property>  -->
+		 <property name="keyService" ref="berkeleyKeyService"></property> 
+<!-- 		<property name="keyService" ref="fastLuceneKVStore"></property> -->
 		
 	</bean>
 	
