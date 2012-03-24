@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/je-4.1.7.jar"/>
 	<classpathentry kind="lib" path="lib/ant.jar"/>
 	<classpathentry kind="lib" path="lib/spring-context-3.0.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/spring-core-3.0.4.RELEASE.jar"/>
@@ -26,5 +25,6 @@
 	<classpathentry kind="lib" path="lib/orientdb-1.0rc8/orient-commons-1.0rc8.jar"/>
 	<classpathentry kind="lib" path="lib/orientdb-1.0rc8/orientdb-core-1.0rc8.jar"/>
 	<classpathentry kind="lib" path="lib/orientdb-1.0rc8/persistence-api-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/je-5.0.34.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
