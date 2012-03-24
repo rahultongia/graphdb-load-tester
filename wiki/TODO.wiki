@@ -1,0 +1,5 @@
+#summary List of outstanding tasks
+
+= TODO =
+
+  * Add Krati as an example key indexing service
