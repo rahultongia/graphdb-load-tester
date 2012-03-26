@@ -91,6 +91,7 @@ public class KVStore
     ActiveSegment activeSegment;
     //Set this to a non-zero number to set the threshold for initiating background merges
     private int minNumberDeletedKeysForAMerge = -1;
+    private KVStoreConfig config;
 
     // A read+write enabled segment (only one write-capable segment is enabled at any one time).
     static class ActiveSegment
@@ -103,14 +104,18 @@ public class KVStore
         volatile long outLastFlushedLength = 0;
         volatile long inReadableExtent = 0;
         private int segNum;
-        LRUCache<Key, byte[]> hotKeyCache = new LRUCache<Key, byte[]>(10000);//TODO parameterize size of cache
+        LRUCache<Key, byte[]> hotKeyCache = null;
 
         //Creates a new ActiveSegment
-        public ActiveSegment(Directory dir, String segmentFileName, int startPointerSize, int segNum)
-                throws IOException
+        public ActiveSegment(Directory dir, String segmentFileName, int startPointerSize,
+                int segNum, KVStoreConfig config) throws IOException
         {
             super();
             this.dir = dir;
+            if (config.getKeyValueLRUCacheSize() > 0)
+            {
+                hotKeyCache = new LRUCache<Key, byte[]>(config.getKeyValueLRUCacheSize());
+            }
             this.segNum = segNum;
             this.segmentFileName = segmentFileName;
             //            this.out = dir.createOutput(segmentFileName, IOContext.DEFAULT);//Lucene 4.0
@@ -122,9 +127,13 @@ public class KVStore
 
         //Used when opening an existing Active Segment
         public ActiveSegment(Directory dir, IndexOutput out, String segmentFileName,
-                TIntIntHashMap ptrMap, int segNum)
+                TIntIntHashMap ptrMap, int segNum, KVStoreConfig config)
         {
             super();
+            if (config.getKeyValueLRUCacheSize() > 0)
+            {
+                hotKeyCache = new LRUCache<Key, byte[]>(config.getKeyValueLRUCacheSize());
+            }
             this.dir = dir;
             this.out = out;
             this.segmentFileName = segmentFileName;
@@ -142,7 +151,11 @@ public class KVStore
             //TODO consider moving the cache up to top-level (i.e. not just active segment)
             //to avoid reads on frequently-read-but-rarely-updated keys?
             // Maybe OS-level file caching mitigates those areas for us anyway?
-            byte[] result = hotKeyCache.get(new Key(keyHash, searchKey));
+            byte[] result = null;
+            if (hotKeyCache != null)
+            {
+                hotKeyCache.get(new Key(keyHash, searchKey));
+            }
             if (result == null)
             {
                 result = noneCachedGet(keyHash, searchKey);
@@ -230,7 +243,10 @@ public class KVStore
             {
                 updateEntryInThisSegment(key, newValue, keyHash, ptr);
             }
-            hotKeyCache.put(new Key(keyHash, key), newValue);
+            if (hotKeyCache != null)
+            {
+                hotKeyCache.put(new Key(keyHash, key), newValue);
+            }
         }
 
         private void updateEntryInThisSegment(byte[] key, byte[] newValue, int keyHash, int ptr)
@@ -409,7 +425,18 @@ public class KVStore
 
     public KVStore(Directory dir) throws IOException
     {
+        this(dir, null);
+    }
+
+    public KVStore(Directory dir, KVStoreConfig config) throws IOException
+    {
         this.fsDir = dir;
+        if (config == null)
+        {
+            //Run with default settings
+            config = new KVStoreConfig();
+        }
+        this.config = config;
         //=================================
         // Open segments control file
         //TODO loop around this, deleting the latest generation of the segments file if it is in anyway corrupt
@@ -576,12 +603,12 @@ public class KVStore
             fsDir.sync(Collections.singleton(revisedActiveSegName));
             saveNewCommitInfo(truncatedActiveSeg.getFilePointer());
             ActiveSegment revisedSeg = new ActiveSegment(fsDir, truncatedActiveSeg,
-                    revisedActiveSegName, ptrMap, activeSegID);
+                    revisedActiveSegName, ptrMap, activeSegID, config);
             fsDir.deleteFile(activeSegmentFileName); //Now we have recreated the active seg minus any corruptions we can delete it
             return revisedSeg;
         }
         return new ActiveSegment(fsDir, activeSegmentFileName, DEFAULT_SEGMENT_MAP_START_SIZE,
-                activeSegID);
+                activeSegID, config);
     }
 
     public ReadOnlySegment getReadOnlySegment(int segID, int segmentMapStartSize, KVStore bigmap)
@@ -1016,7 +1043,7 @@ public class KVStore
         String activeSegName = SEGMENT_FILE_NAME_PREFIX + activeSegID;
         saveNewCommitInfo(activeSegLastSavePoint);
         activeSegment = new ActiveSegment(fsDir, activeSegName, DEFAULT_SEGMENT_MAP_START_SIZE,
-                activeSegID);
+                activeSegID, config);
     }
 
     //Represents a filled-to-capacity segment file of key-value pairs
