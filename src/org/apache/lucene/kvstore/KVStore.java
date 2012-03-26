@@ -116,6 +116,7 @@ public class KVStore
             //            this.out = dir.createOutput(segmentFileName, IOContext.DEFAULT);//Lucene 4.0
             this.out = dir.createOutput(segmentFileName);
             out.writeVInt(SOFTWARE_VERSION);//header version number
+            out.flush();
             ptrMap = new TIntIntHashMap(startPointerSize);
         }
 
@@ -1361,7 +1362,6 @@ public class KVStore
         }
         readOnlySegments = new ReadOnlySegment[0];
         createBlankSegmentsFile();
-        activeSegment = openActiveSegment();
     }
 
     static class LRUCache<K, V> extends LinkedHashMap<K, V>
