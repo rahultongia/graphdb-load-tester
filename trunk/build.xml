@@ -24,6 +24,9 @@
 		<fileset dir="lib/neo4j1.6">
 			<include name="*.jar" />				
 		</fileset>
+		<fileset dir="lib/krati">
+			<include name="*.jar" />				
+		</fileset>
 		<fileset dir="lib/orientdb-1.0rc8">
 			<include name="*.jar" />				
 		</fileset>

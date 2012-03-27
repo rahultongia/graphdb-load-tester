@@ -21,6 +21,8 @@
 	<classpathentry kind="lib" path="lib/neo4j1.6/neo4j-udc-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/neo4j1.6/server-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/trove-3.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/krati/krati-0.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/log4j.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/orientdb-1.0rc8/orient-commons-1.0rc8.jar"/>
 	<classpathentry kind="lib" path="lib/orientdb-1.0rc8/orientdb-core-1.0rc8.jar"/>

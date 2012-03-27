@@ -36,8 +36,9 @@
 	 -->	
 	<bean id="indexOnlyLoader" class="com.tinkerpop.graph.benchmark.loader.GraphIndexOnlyLoaderServiceImpl" lazy-init="true" >
 <!--	 <property name="keyService" ref="fastLuceneKeyService"></property>  -->
-		 <property name="keyService" ref="berkeleyKeyService"></property> 
-<!-- 		<property name="keyService" ref="fastLuceneKVStore"></property> -->
+<!-- 		 <property name="keyService" ref="berkeleyKeyService"></property> -->
+ 		<property name="keyService" ref="kratiKVStore"></property> 
+<!-- 		 <property name="keyService" ref="fastLuceneKVStore"></property> -->
 		
 	</bean>
 	
@@ -81,6 +82,10 @@
 		<constructor-arg value="indexes/wikipediaNeo4jLuceneKVStore"/>
 	</bean>
 	
+	<bean id="kratiKVStore" class="com.tinkerpop.graph.benchmark.index.KratiIndexServiceImpl" lazy-init="true" init-method="init">
+		<constructor-arg value="indexes/kratiKVStore"/>
+		<property name="segmentType" value="Channel"/> <!-- options are Memory, Mapped or Channel. See http://sna-projects.com/krati/design.php -->
+	</bean>	
 	<bean id="berkeleyKeyService" class="com.tinkerpop.graph.benchmark.index.BerkeleyIndexImpl"  lazy-init="true">
 				<constructor-arg value="indexes/berkleyKeyIndex"/>
 	</bean>
